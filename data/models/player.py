@@ -4,25 +4,23 @@ from data.constants import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
+
         self.image = pygame.Surface((20, 30))
         self.image.fill('red')
         self.rect = self.image.get_rect(topleft = pos)
         
         self.gravity = 0
         self.movement_value = 4
-        self.jump_value = 17
+        self.jump_value = 16
         
         self.movement = [0,0]
         self.moving_right = False
         self.moving_left = False
         self.moving_up = False
-
         self.block_movement = False
 
         self.collisions_on = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
-    # general idea is basically update the movement state here so essentially
-    # taking a touple and setting it based on set variables, moving_..
     def update_gravity(self):
         self.movement = [0, 0]
 
@@ -37,13 +35,7 @@ class Player(pygame.sprite.Sprite):
             if self.moving_left:
                 self.movement[0] -= 0.1
 
-        if self.moving_up:
-            self.gravity -= self.jump_value
-
-        # fixed bug causing player to stick to bottom of tile too long
-        if not self.collisions_on['bottom'] and self.collisions_on['top']:
-            self.gravity += 1
-        # set here self.gravity to -= 1 if you want player to stick
+        if self.moving_up: self.attempt_jump()
 
         self.gravity += 1
         if self.gravity > 15: self.gravity = 15
@@ -62,6 +54,9 @@ class Player(pygame.sprite.Sprite):
             self.moving_up = True
         else: self.moving_up = False
 
+    def attempt_jump(self):
+        self.gravity -= self.jump_value
+
     # check for any collisions
     def get_collisions(self, tiles):
         collisions = []
@@ -70,9 +65,7 @@ class Player(pygame.sprite.Sprite):
                 collisions.append(tile)
         return collisions
 
-    # move player + return and handle tile collisions
     def move(self, tiles):
-        # resetting it here in order to get accurate values
         self.collisions_on = {'top': False, 'bottom': False, 'right': False, 'left': False}
         # x axis
         if round(self.movement[0]) != 0: self.rect.x += self.movement[0]
@@ -85,7 +78,7 @@ class Player(pygame.sprite.Sprite):
                 self.rect.left = tile.right
                 self.collisions_on['left'] = True
         # y axis
-        self.rect.y += self.movement[1]
+        if round(self.movement[1]) != 0: self.rect.y += self.movement[1]
         collisions = self.get_collisions(tiles)
         for tile in collisions:
             if self.movement[1] > 0:
@@ -99,7 +92,11 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, tiles):
         self.key_input()
-        if self.collisions_on['bottom']: 
+
+        if self.collisions_on['bottom'] or self.collisions_on['top']: 
             self.gravity = 0
+
+        if self.gravity > 0:
+            self.movement[1] += 0.1
         self.collisions_on = self.move(tiles)
         self.update_gravity()

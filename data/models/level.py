@@ -20,18 +20,24 @@ class Level:
 
     def update_world(self):
         
-        if self.player_obj.moving_left and self.player_obj.rect.x <= WINDOW[0]/2:
+        if self.player_obj.moving_left and self.player_obj.rect.x <= 150:
             self.player_obj.block_movement = True
             self.scroll_value[0] -= self.player_obj.movement_value
-        elif self.player_obj.moving_right and self.player_obj.rect.x >= WINDOW[0]/2:
+        elif self.player_obj.moving_right and self.player_obj.rect.x >= (WINDOW[0]-150):
             self.player_obj.block_movement = True
             self.scroll_value[0] += self.player_obj.movement_value
-        else:
+        else: 
             self.player_obj.block_movement = False
 
-    def run(self):
-        self.update_world()
-        self.world_rects = build_world(self.map, self.screen, self.scroll_value)
+        if self.player_obj.rect.y <= 150:
+            self.scroll_value[1] -= 2
+        elif self.player_obj.rect.y >= (WINDOW[1]-150):
+            self.scroll_value[1] += 10
+        
 
+    def run(self):
         self.player.draw(self.screen)
         self.player.update(self.world_rects)
+
+        self.update_world()
+        self.world_rects = build_world(self.map, self.screen, self.scroll_value)

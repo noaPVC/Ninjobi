@@ -21,8 +21,8 @@ def build_world(map, screen, scroll):
     for y_index, row in enumerate(map):
         for x_index, tile in enumerate(row):
             if tile != '0':
-                x = x_index * tile_size - scroll[0]
-                y = y_index * tile_size - scroll[1]
+                x = x_index * tile_size - int(scroll[0])
+                y = y_index * tile_size - int(scroll[1])
 
                 if tile == '1': screen.blit(tile_dict['empty_tile'], (x, y))
                 elif tile == '2': screen.blit(tile_dict['middle_tile'], (x, y))
