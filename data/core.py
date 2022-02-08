@@ -16,7 +16,7 @@ def asset_loader(path):
 
 # main builder tile world
 def build_world(map, screen, scroll):
-    tile_dict = asset_loader('data/assets/tiles')
+    tile_dict = asset_loader('data/assets/tiles/forest')
     tile_rects_list = []
     for y_index, row in enumerate(map):
         for x_index, tile in enumerate(row):

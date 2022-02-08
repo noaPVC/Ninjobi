@@ -2,22 +2,22 @@ import pygame
 from data.constants import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos):
+    def __init__(self, image, pos):
         super().__init__()
 
-        self.image = pygame.Surface((20, 30))
-        self.image.fill('red')
+        self.image = image
         self.rect = self.image.get_rect(topleft = pos)
         
         self.gravity = 0
-        self.movement_value = 4
-        self.jump_value = 16
+        self.movement_value = 5
+        self.jump_value = 20
         
         self.movement = [0,0]
         self.moving_right = False
         self.moving_left = False
-        self.moving_up = False
         self.block_movement = False
+
+        self.moving_up = False
 
         self.collisions_on = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
@@ -38,20 +38,17 @@ class Player(pygame.sprite.Sprite):
         if self.moving_up: self.gravity -= self.jump_value
 
         self.gravity += 1
-        if self.gravity > 15: self.gravity = 15
+        if self.gravity > 23: self.gravity = 23
         self.movement[1] += self.gravity
 
     def key_input(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LEFT]:
-            self.moving_left = True
+        if keys[pygame.K_LEFT]: self.moving_left = True
         else: self.moving_left = False
-        if keys[pygame.K_RIGHT]:
-            self.moving_right = True
+        if keys[pygame.K_RIGHT]: self.moving_right = True
         else: self.moving_right = False
-        if keys[pygame.K_UP] and self.collisions_on['bottom']:
-            self.moving_up = True
+        if keys[pygame.K_UP] and self.collisions_on['bottom']: self.moving_up = True
         else: self.moving_up = False
 
     # check for any collisions
