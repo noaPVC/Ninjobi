@@ -20,23 +20,16 @@ def build_world(map, screen, scroll):
     tile_rects_list = []
     for y_index, row in enumerate(map):
         for x_index, tile in enumerate(row):
-            if tile != '0':
-                x = x_index * tile_size - int(scroll[0])
-                y = y_index * tile_size - int(scroll[1])
-
+            x = x_index * tile_size - int(scroll[0])
+            y = y_index * tile_size - int(scroll[1])
+            if tile != '0' and tile != '20':
                 if tile == '1': screen.blit(tile_dict['empty_tile'], (x, y))
                 elif tile == '2': screen.blit(tile_dict['middle_tile'], (x, y))
                 elif tile == '3': screen.blit(tile_dict['platform_tile'], (x, y))
                 elif tile == '4': screen.blit(tile_dict['platform_left_corner'], (x, y))
                 elif tile == '5': screen.blit(tile_dict['platform_right_corner'], (x, y))
-                elif tile == '6': screen.blit(tile_dict['top_left_corner'], (x, y))
-                elif tile == '7': screen.blit(tile_dict['top_right_corner'], (x, y))
-                elif tile == '8': screen.blit(tile_dict['side_tile_left'], (x, y))
-                elif tile == '9': screen.blit(tile_dict['side_tile_right'], (x, y))
-                elif tile == '10': screen.blit(tile_dict['bottom_middle_tile'], (x, y))
-                elif tile == '11': screen.blit(tile_dict['bottom_left_corner'], (x, y))
-                elif tile == '12': screen.blit(tile_dict['bottom_right_corner'], (x, y))
-
+                elif tile == '6': screen.blit(tile_dict['single_tile'], (x, y))
                 tile_rects_list.append(pygame.Rect(x, y, tile_size, tile_size))
+            elif tile == '20': screen.blit(tile_dict['grass'], (x, y))
 
     return tile_rects_list
