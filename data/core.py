@@ -14,6 +14,20 @@ def asset_loader(path):
             dict_of_assets[img.split('.')[0]] = pygame.transform.scale(pygame_image, (tile_size, tile_size))
     return dict_of_assets
 
+# load animation sets
+def animation_asset_loader(path):
+    dict_animation_sprites = {}
+    for _,folders,__ in os.walk(path):
+        for folder in folders:
+            folder_path = path + '/' + folder
+            for _,__,imgs in os.walk(folder_path):
+                animation_list = []
+                for img in imgs:
+                    image = pygame.image.load(folder_path + '/' + img).convert_alpha()
+                    animation_list.append(image)
+                dict_animation_sprites[folder] = animation_list
+    return dict_animation_sprites
+
 # main builder tile world
 def build_world(map, screen, scroll):
     tile_dict = asset_loader('data/assets/tiles/forest')

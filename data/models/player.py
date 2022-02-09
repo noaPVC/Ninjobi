@@ -1,13 +1,16 @@
 import pygame
 from data.constants import *
+from data.core import animation_asset_loader, asset_loader
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, image, pos):
+    def __init__(self, pos):
         super().__init__()
+        self.animation_sprites = animation_asset_loader('data/assets/characters/ninja')
 
-        self.image = image
+        self.animation_frame_index = 0
+        self.image = self.animation_sprites['idle'][self.animation_frame_index]
         self.rect = self.image.get_rect(topleft = pos)
-        
+
         self.gravity = 0
         self.movement_value = 5
         self.jump_value = 20
@@ -15,9 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.movement = [0,0]
         self.moving_right = False
         self.moving_left = False
-        self.block_movement = False
-
         self.moving_up = False
+        self.block_movement = False
 
         self.collisions_on = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
@@ -40,6 +42,14 @@ class Player(pygame.sprite.Sprite):
         self.gravity += 1
         if self.gravity > 23: self.gravity = 23
         self.movement[1] += self.gravity
+
+    pygame.USEREVENT + 1
+
+    def perform_animation(self, type):
+        if self.animation_frame_index < len(self.animation_sprites[type]):
+            self.image = self.animation_sprites[type][int(self.animation_frame_index)]
+            self.animation_frame_index += 0.15
+        else: self.animation_frame_index = 0        
 
     def key_input(self):
         keys = pygame.key.get_pressed()
@@ -88,4 +98,5 @@ class Player(pygame.sprite.Sprite):
         self.key_input()
         if self.collisions_on['bottom'] or self.collisions_on['top']: self.gravity = 0
         self.collisions_on = self.move(tiles)
+        self.perform_animation('idle')
         self.update_gravity()

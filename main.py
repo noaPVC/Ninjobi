@@ -16,7 +16,7 @@ while True:
             pygame.quit()
             sys.exit()
     
-    screen.fill('#5bbce4')
+    screen.fill('#3c85a7')
     level.run()
 
     pygame.display.update()
