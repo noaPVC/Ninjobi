@@ -14,7 +14,7 @@ class Level:
 
     def init_player(self):
         self.player = pygame.sprite.GroupSingle()
-        self.player_obj = Player(pygame.image.load('data/assets/characters/ninja/ninja_blue.png').convert_alpha(), (WINDOW[0]/2, 200))
+        self.player_obj = Player(pygame.image.load('data/assets/characters/ninja/idle/ninja_blue.png').convert_alpha(), (WINDOW[0]/2, 200))
         self.player.add(self.player_obj)
 
     def update_world(self):
