@@ -1,2 +1,2 @@
-# Platformer
-Creating my first platformer game.
+# Ninjobi
+Creating my first platformer game using python.
