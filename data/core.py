@@ -1,6 +1,5 @@
 from data.constants import *
 import pygame
-import json
 import os
 
 # basically all needed funcs like assets loaders, animation helpers, etc.

@@ -16,7 +16,7 @@ while True:
             pygame.quit()
             sys.exit()
     
-    screen.fill('#3c85a7')
+    screen.fill(BASE_SKY_COLOR_NIGHT)
     level.run()
 
     pygame.display.update()

@@ -1,6 +1,6 @@
 import pygame
 from data.constants import *
-from data.core import animation_asset_loader, asset_loader
+from data.core import animation_asset_loader
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -8,6 +8,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_sprites = animation_asset_loader('data/assets/characters/ninja')
 
         self.animation_frame_index = 0
+        self.is_flipped = False
         self.image = self.animation_sprites['idle'][self.animation_frame_index]
         self.rect = self.image.get_rect(topleft = pos)
 
@@ -43,20 +44,25 @@ class Player(pygame.sprite.Sprite):
         if self.gravity > 23: self.gravity = 23
         self.movement[1] += self.gravity
 
-    pygame.USEREVENT + 1
-
-    def perform_animation(self, type):
+    def perform_animation(self, type, duration_speed):
         if self.animation_frame_index < len(self.animation_sprites[type]):
-            self.image = self.animation_sprites[type][int(self.animation_frame_index)]
-            self.animation_frame_index += 0.15
+            image = self.animation_sprites[type][int(self.animation_frame_index)]
+            if self.is_flipped: self.image = pygame.transform.flip(image, True, False)
+            else: self.image = self.image = image
+            self.animation_frame_index += duration_speed
         else: self.animation_frame_index = 0        
 
     def key_input(self):
         keys = pygame.key.get_pressed()
+        self.perform_animation('idle', 0.15)
 
-        if keys[pygame.K_LEFT]: self.moving_left = True
+        if keys[pygame.K_LEFT]: 
+            self.moving_left = True
+            self.is_flipped = True
         else: self.moving_left = False
-        if keys[pygame.K_RIGHT]: self.moving_right = True
+        if keys[pygame.K_RIGHT]: 
+            self.moving_right = True
+            self.is_flipped = False
         else: self.moving_right = False
         if keys[pygame.K_UP] and self.collisions_on['bottom']: self.moving_up = True
         else: self.moving_up = False
@@ -98,5 +104,4 @@ class Player(pygame.sprite.Sprite):
         self.key_input()
         if self.collisions_on['bottom'] or self.collisions_on['top']: self.gravity = 0
         self.collisions_on = self.move(tiles)
-        self.perform_animation('idle')
         self.update_gravity()
