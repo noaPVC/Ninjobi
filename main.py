@@ -16,7 +16,7 @@ while True:
             pygame.quit()
             sys.exit()
     
-    screen.fill(BASE_SKY_COLOR_NIGHT)
+    screen.fill(BASE_SKY_COLOR_DAY)
     level.run()
 
     pygame.display.update()
